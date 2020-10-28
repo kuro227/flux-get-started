@@ -33,7 +33,7 @@ kubectl create ns flux
 - k8s Cluster に flux をインストールする
 
 ```
-export GHUSER="yosuke.k22@gmail.com"
+export GHUSER="kuro227"
 fluxctl install \
 --git-user=${GHUSER} \
 --git-email=${GHUSER}@users.noreply.github.com \
@@ -59,7 +59,20 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCrN+Wn+ShzjbU4wYu2Js8VBUEl5OngB4f9EO9b7T76
 - cluster と git を同期するためには、github リポジトリに書き込みアクセス権を持つデプロイ鍵を作る必要がある。
 - github.com のリポジトリの設定から deploy key を追加する。
 
+- workloads/podinfo-dep.yaml を編集しコミットし master ブランチに push
+- 以下のコマンドで Flux と sync する（デフォルトでは 5 分で sync する）
 
+```
+fluxctl sync --k8s-fwd-ns flux
+Synchronizing with ssh://git@github.com/kuro227/flux-get-started
+Revision of master to apply is 4dc04ed
+Waiting for 4dc04ed to be applied ...
+Done.
+```
+- 確認
+```
+kubectl -n demo port-forward deployment/podinfo 9898:9898 &
+```
 
 ## 参考
 
